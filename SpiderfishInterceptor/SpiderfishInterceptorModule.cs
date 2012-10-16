@@ -30,7 +30,7 @@ namespace SpiderfishInterceptor
                 }
                 app.Context.Response.Write(response.Body);
                 app.CompleteRequest();
-            } catch
+            } catch (Exception ex)
             {
                 // if there is an error then proceed to normal request processing
             }
