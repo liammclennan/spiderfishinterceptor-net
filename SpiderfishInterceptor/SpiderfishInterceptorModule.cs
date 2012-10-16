@@ -19,13 +19,10 @@ namespace SpiderfishInterceptor
             if (!RequestClassifier.IsCrawlerRequest(app.Context.Request.RawUrl))
                 return;
 
-            throw new Exception(app.Context.Request.RawUrl);
-
             SpiderfishResponse response;
             try
             {
-                var target = "http://spiderfishinterceptor.azurewebsites.net/?_escaped_fragment_=";
-                response = SpiderfishGateway.Init()(target);
+                response = SpiderfishGateway.Init()(app.Context.Request.Url.ToString());
                 app.Context.Response.StatusCode = response.StatusCode;
                 foreach (var key in response.Headers.AllKeys)
                 {
