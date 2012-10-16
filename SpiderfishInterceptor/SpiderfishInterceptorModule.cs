@@ -22,7 +22,8 @@ namespace SpiderfishInterceptor
             SpiderfishResponse response;
             try
             {
-                response = SpiderfishGateway.Init()(app.Context.Request.RawUrl);
+                var target = "http://spiderfishinterceptor.azurewebsites.net/?_escaped_fragment_=";
+                response = SpiderfishGateway.Init()(target);
                 app.Context.Response.StatusCode = response.StatusCode;
                 foreach (var key in response.Headers.AllKeys)
                 {
