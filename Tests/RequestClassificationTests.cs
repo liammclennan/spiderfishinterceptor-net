@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Web;
+using System.Web.Script.Serialization;
 using NUnit.Framework;
 
 namespace SpiderfishInterceptor.Tests
@@ -44,6 +45,26 @@ namespace SpiderfishInterceptor.Tests
     }
 
     [TestFixture]
+    public class Request
+    {
+        [Test]
+        public void Honeypot()
+        {
+            var target = "http://honeypot.withouttheloop.com/?_escaped_fragment_=";
+            var response = SpiderfishGateway.Init()(target);
+            Assert.IsTrue(response.Body.Contains("Handlebars"));
+        }
+        
+        [Test]
+        public void HoneypotArticle()
+        {
+            var target = "http://honeypot.withouttheloop.com/page/backbone?_escaped_fragment_=";
+            var response = SpiderfishGateway.Init()(target);
+            Assert.IsTrue(response.Body.Contains("In the beginning"));
+        }
+    }
+
+    [TestFixture]
     public class HttpRequests
     {
         [Test]
@@ -53,7 +74,7 @@ namespace SpiderfishInterceptor.Tests
             //var stream = client.OpenRead("http://honeypot.withouttheloop.com");
             //Console.WriteLine(new StreamReader(stream).ReadToEnd());
 
-            var url = "http://spiderfi.sh:4242/fetch?data=" +
+            var url = "http://spiderfi.sh:4242/?data=" +
                       "%7B%22target%22%3A%22http%3A%2F%2Fhoneypot.withouttheloop.com%22%7D";
             Console.WriteLine(url);
             Console.WriteLine(new StreamReader(client.OpenRead(url)).ReadToEnd());
@@ -63,11 +84,19 @@ namespace SpiderfishInterceptor.Tests
         [Test]
         public void HttpWebRequest()
         {
-            var url = "http://spiderfi.sh:4242/fetch?data=" +
+            var url = "http://spiderfi.sh:4242/?data=" +
                       "%7B%22target%22%3A%22http%3A%2F%2Fhoneypot.withouttheloop.com%22%7D";
             HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url);
             var response = (HttpWebResponse)myReq.GetResponse();
             Console.WriteLine(new StreamReader(response.GetResponseStream()).ReadToEnd());
+        }
+
+        [Test]
+        public void Encoding()
+        {
+            var target = "http://honeypot.withouttheloop.com";
+            var serializer = new JavaScriptSerializer();
+            Console.WriteLine(HttpUtility.UrlEncode(serializer.Serialize(new {target})));
         }
     }
 }

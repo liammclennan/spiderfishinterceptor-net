@@ -19,8 +19,21 @@ namespace SpiderfishInterceptor
             if (!RequestClassifier.IsCrawlerRequest(app.Context.Request.RawUrl))
                 return;
 
-            var gateway = SpiderfishGateway.Init();
-            gateway(app.Context.Request.RawUrl, app);
+            SpiderfishResponse response;
+            try
+            {
+                response = SpiderfishGateway.Init()(app.Context.Request.RawUrl);
+                app.Context.Response.StatusCode = response.StatusCode;
+                foreach (var key in response.Headers.AllKeys)
+                {
+                    app.Context.Response.Headers.Add(key, response.Headers[key]);
+                }
+                app.Context.Response.Write(response.Body);
+                app.CompleteRequest();
+            } catch
+            {
+                // if there is an error then proceed to normal request processing
+            }
         }
 
         public void Dispose()

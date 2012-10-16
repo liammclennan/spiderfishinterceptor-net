@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "User";
+}
+
+<h2>User</h2>
+
+<div id="content">
+    <ul></ul>
+</div>
+
+@section scripts
+{
+<script type="text/javascript">
+    $(function () {
+        $.get('https://api.github.com/users/@Model/repos', function (repos) {
+            $.each(repos, function (index, item) {
+                $('#content ul').append("<li>" + item.name + "</li>");
+            });
+        });
+    });
+</script>
+}

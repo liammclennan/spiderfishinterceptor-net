@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div id="content">
+    <ul></ul>
+</div>
+
+@section scripts
+{
+<script type="text/javascript">
+    $(function () {
+        $.get('https://api.github.com/events', function (events) {
+            $.each(events, function (index, item) {
+                $('#content ul').append("<li><a href='home/user?login=" + item.actor.login + "'>" + item.actor.login + " " + item.repo.name + "</a></li>");
+            });
+        });
+    });
+</script>
+}
+
