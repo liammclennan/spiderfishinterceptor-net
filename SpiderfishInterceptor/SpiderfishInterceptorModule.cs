@@ -33,6 +33,7 @@ namespace SpiderfishInterceptor
             } catch (Exception ex)
             {
                 // if there is an error then proceed to normal request processing
+                throw ex;
             }
         }
 

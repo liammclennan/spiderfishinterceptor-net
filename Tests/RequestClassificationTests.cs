@@ -56,6 +56,15 @@ namespace SpiderfishInterceptor.Tests
         }
         
         [Test]
+        public void Azure()
+        {
+            var target = "http://spiderfishinterceptor.azurewebsites.net/?_escaped_fragment_=";
+            var response = SpiderfishGateway.Init()(target);
+            Console.WriteLine(response.Body);
+            Assert.IsTrue(response.Body.Contains("home/user"));
+        }
+        
+        [Test]
         public void HoneypotArticle()
         {
             var target = "http://honeypot.withouttheloop.com/page/backbone?_escaped_fragment_=";
