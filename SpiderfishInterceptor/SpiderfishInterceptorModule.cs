@@ -19,6 +19,8 @@ namespace SpiderfishInterceptor
             if (!RequestClassifier.IsCrawlerRequest(app.Context.Request.RawUrl))
                 return;
 
+            throw new Exception(app.Context.Request.RawUrl);
+
             SpiderfishResponse response;
             try
             {
