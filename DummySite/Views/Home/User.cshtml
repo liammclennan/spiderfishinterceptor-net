@@ -11,12 +11,21 @@
 @section scripts
 {
 <script type="text/javascript">
-    $(function () {
-        $.get('https://api.github.com/users/@Model/repos', function (repos) {
-            $.each(repos, function (index, item) {
+    $.ajax({
+        type: 'GET',
+        url: 'https://api.github.com/users/@Model/repos?callback=foo',
+        async: false,
+        jsonpCallback: 'foo',
+        contentType: "application/json",
+        dataType: 'jsonp',
+        success: function (repos) {
+            $.each(repos.data, function (index, item) {
                 $('#content ul').append("<li>" + item.name + "</li>");
             });
-        });
+        },
+        error: function (e) {
+            console.log(e.message);
+        }
     });
 </script>
 }
